@@ -4,6 +4,12 @@
 #define TREE_TYPE int
 #define size 15
 
+/*
+Most of the BST operations (e.g., search, max, min, insert, delete.. etc) take O(h) time where h is the height of the BST.
+
+*/
+
+
 typedef struct Tree{
 	TREE_TYPE value;
 	struct Tree *left;
@@ -14,11 +20,6 @@ static Tree_node *root;
 
 void create_tree(){
 	root = NULL;
-}
-
-struct Tree* testStructTypeName(struct Tree* a){
-	a = NULL;
-	return NULL;
 }
 
 Tree_node* minValueNode(Tree_node *node){
