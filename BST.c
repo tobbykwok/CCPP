@@ -1,4 +1,6 @@
 #include<stdio.h>
+#include<stdlib.h>
+#include<malloc.h>
 #define TREE_TYPE int
 #define size 15
 
@@ -17,6 +19,14 @@ void create_tree(){
 struct Tree* testStructTypeName(struct Tree* a){
 	a = NULL;
 	return NULL;
+}
+
+Tree_node* minValueNode(Tree_node *node){
+	Tree_node* current = node;
+	while(current->left != NULL){
+		current = current->left;
+	}
+	return current;
 }
 
 Tree_node* insert(Tree_node *node, TREE_TYPE value){
@@ -91,6 +101,46 @@ Tree_node* find_parent(Tree_node *parent, TREE_TYPE value){
 	return result;
 }
 
+/*
+Deletion of a node:
+	1) Node to be deleted is leaf: Simply remove from the tree.
+	2) Node to be deleted has only one child: Copy the child to the node and delete the child.
+	3) Node to be deleted has two children: 
+
+*/
+Tree_node* delete_node(Tree_node *root, TREE_TYPE key){
+	if(root == NULL){
+		return root;
+	}
+	
+	if(key < root->value){
+		// if the key to be deleted is smaller than the root's tree. then it lies in left tree.
+		root->left = delete_node(root->left, key);
+	} else if(key > root->value){
+		root->right = delete_node(root->right, key);
+	} else{
+		// if key is same as root's key, then this is the node to be deleted.
+		// further checks:
+		//     1) node with only one child or no child.
+		if(root->left == NULL){
+			Tree_node* t = root->right;
+			free(root);
+			return t;
+		}else if(root->right == NULL){
+			Tree_node* t = root->left;
+			free(root);
+			return t;
+		}
+		//     2) node with two children: Get the inorder successor (smallest in the right subtree)
+		Tree_node* t = minValueNode(root->right);
+		
+		root->value = t->value;
+		root->right = delete_node(root->right, t->value);
+	}
+	
+	return root;
+}
+
 int main()  
 {  
     /**³õÊ¼»¯*/  
@@ -119,5 +169,11 @@ int main()
         printf("To find %d's parent,result is %d\n",14,parent_result->value);  
     else  
         printf("Cannot find %d's parent\n",14);  
+        
+    printf("------------------------------\r\n");
+	root = delete_node(root, 4);
+	root = delete_node(root, 15);
+	show_all(root);
+	system("pause");
     return 0;  
 }  
