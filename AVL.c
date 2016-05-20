@@ -15,6 +15,7 @@ typedef struct AVL_TREE_NODE{
 	struct AVL_TREE_NODE *right;
 	struct AVL_TREE_NODE *p;
 	int Height;
+	int frequency;
 } tNode, tTree;
 
 int height(tNode* k){
@@ -27,6 +28,19 @@ int height(tNode* k){
 
 int heightInit(tNode* k){
 	return max(height(k->left), height(k->right)) + 1;
+}
+
+tNode* root;
+
+//生成新的Node 
+tNode* NodeInit(TREE_TYPE val){
+	tNode* p = (tNode*)malloc(sizeof(tNode));
+	p->frequency = 1;
+	p->Height = 0;
+	p->left = NULL;
+	p->right = NULL;
+	p->p = NULL;
+	return p;
 }
 
 /*
@@ -87,23 +101,59 @@ tNode* rrRotate(tNode* k1){
 
 1) RR
 2) LL
+		k3
+	   /  \
+	  k1  D
+	 / \
+	A	k2
+	   /  \
+	  (B)  C
+//todo test
 */
 tNode* lrRotate(tNode* k3){
+	tNode* k1 = k3->left;
+	tNode* k2 = k1->right;
 	
+	if(k2->left != NULL){
+		tNode* B = k2->left;
+		B->p = k1;
+		k1->right = B;
+		k2->p = B;
+		B->right = k2; 
+	}
+	
+	k3->left = rrRotate(k1);
+	return llRotate(k3);
 }
 
+/*
+		k4
+	   /  \
+	  D   k3
+	     /  \
+	    k2   B
+	   /  \
+	  A  (C)
+*/
 tNode* rlRotate(tNode* k4){
+	tNode* k3 = k4->right;
+	tNode* k2 = k3->left;
 	
+	if(k2->right != NULL){
+		tNode* C = k2->right;
+		k3->left = C;
+		C->p = k3;
+		k2->p = C;
+		C->left = k2;
+	}
+	
+	k4->right = llRotate(k3);
+	return rrRotate(k4);
 }
 
-tTree* AVL_Insert(TREE_TYPE val, tTree* T){
+tTree* addNode(TREE_TYPE val, tTree* k){
 	
 }
-
-tTree* Rotate(tTree* T){
-	
-}
-
 /*
 插入->旋转
 1) root->left->left = newNode; 		左旋
