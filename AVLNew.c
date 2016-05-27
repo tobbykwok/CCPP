@@ -117,6 +117,22 @@ Node* Add(Node* root, Node* parent, TREE_TYPE val){
 	return root;
 }
 
+Node* Delete(Node* root, Node* p){
+	if(root == NULL){
+		return NULL;
+	}
+	if(root->val > p->val){
+		Delete(root->left, p);
+		if(AVL_Balance(root->left, root->right) == -2){
+			
+		}
+	} else if(root->val < p->val){
+		Delete(root->right, p);
+	} else{
+		
+	}
+}
+
 void Print_all(Node* root){
 	if(root!= NULL){
 		Print_all(root->left);
